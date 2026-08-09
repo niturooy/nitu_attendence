@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Attendance Report</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        button {
+            background: green;
+            color: white;
+            border: none;
+        }
+
+        .summary {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 0 5px #aaa;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #ddd;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Student Attendance Report</h1>
+
+    <form method="POST">
+
+        <select name="student_id" required>
+
+            <option value="">
+                Select Student
+            </option>
+
+            {% for student in students %}
+
+            <option value="{{ student.id }}">
+
+                {{ student.student_id }} -
+                {{ student.name }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">
+            View Report
+        </button>
+
+    </form>
+
+
+    {% if selected_student %}
+
+    <h2>
+        {{ selected_student.name }}
+    </h2>
+
+    <div class="summary">
+
+        <div class="box">
+
+            <h3>Total</h3>
+
+            <strong>
+                {{ summary.total_days or 0 }}
+            </strong>
+
+        </div>
+
+
+        <div class="box">
+
+            <h3>Present</h3>
+
+            <strong>
+                {{ summary.present_days or 0 }}
+            </strong>
+
+        </div>
+
+
+        <div class="box">
+
+            <h3>Absent</h3>
+
+            <strong>
+                {{ summary.absent_days or 0 }}
+            </strong>
+
+        </div>
+
+
+        <div class="box">
+
+            <h3>Percentage</h3>
+
+            <strong>
+
+                {% if summary.total_days %}
+
+                    {{ "%.2f"|format(
+                        ((summary.present_days or 0)
+                        / summary.total_days) * 100
+                    ) }}%
+
+                {% else %}
+
+                    0%
+
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+    </div>
+    {% if selected_student %}
+
+<a
+    href="/student_report/pdf/{{ selected_student.id }}"
+    target="_blank"
+>
+    Download PDF
+</a>
+
+<button onclick="window.print()">
+    Print Report
+</button>
+
+{% endif %}
+
+
+    <h2>Attendance History</h2>
+
+    <table>
+
+        <tr>
+            <th>Date</th>
+            <th>Subject Code</th>
+            <th>Subject</th>
+            <th>Status</th>
+        </tr>
+
+        {% for record in records %}
+
+        <tr>
+
+            <td>
+                {{ record.attendance_date }}
+            </td>
+
+            <td>
+                {{ record.code }}
+            </td>
+
+            <td>
+                {{ record.subject_name }}
+            </td>
+
+            <td>
+                {{ record.status }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+</body>
+
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Subject Wise Attendance Report</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        select {
+            padding: 10px;
+            margin: 5px;
+            min-width: 220px;
+        }
+
+        button {
+            padding: 10px 25px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #ddd;
+        }
+
+        .percentage {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Subject Wise Attendance Report</h1>
+
+
+    <!-- FILTER -->
+
+    <div class="filter-box">
+
+        <form method="POST">
+
+            <label>
+                <b>Select Subject:</b>
+            </label>
+
+            <select name="subject_id" required>
+
+                <option value="">
+                    Select Subject
+                </option>
+
+                {% for subject in subjects %}
+
+                <option
+                    value="{{ subject.id }}"
+                    {% if selected_subject
+                    and selected_subject.id == subject.id %}
+                    selected
+                    {% endif %}
+                >
+
+                    {{ subject.code }} -
+                    {{ subject.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <label>
+                <b>Student Roll:</b>
+            </label>
+
+            <select name="student_id" required>
+
+                <option value="">
+                    Select Student Roll
+                </option>
+
+                {% for student in students %}
+
+                <option
+                    value="{{ student.id }}"
+                    {% if selected_student
+                    and selected_student.id == student.id %}
+                    selected
+                    {% endif %}
+                >
+
+                    {{ student.student_id }} -
+                    {{ student.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button type="submit">
+                View Report
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    {% if selected_student and selected_subject %}
+
+    <div class="result">
+
+        <h2>
+            Attendance Result
+        </h2>
+
+        <table>
+
+            <tr>
+                <th>Student Roll</th>
+                <th>Student Name</th>
+                <th>Subject</th>
+                <th>Total Class</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Attendance %</th>
+            </tr>
+
+            <tr>
+
+                <td>
+                    {{ selected_student.student_id }}
+                </td>
+
+                <td>
+                    {{ selected_student.name }}
+                </td>
+
+                <td>
+                    {{ selected_subject.code }}
+                    -
+                    {{ selected_subject.name }}
+                </td>
+
+                <td>
+                    {{ total }}
+                </td>
+
+                <td>
+                    {{ present }}
+                </td>
+
+                <td>
+                    {{ absent }}
+                </td>
+
+                <td class="percentage">
+
+                    {{ "%.2f"|format(percentage) }}%
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+
+    <br>
+
+    <a
+        class="back"
+        href="/teacher_dashboard"
+    >
+        ← Back to Dashboard
+    </a>
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Subject Management</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 80%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Subject Management</h1>
+
+    <h3>Add New Subject</h3>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="code"
+            placeholder="Subject Code"
+            required
+        >
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Subject Name"
+            required
+        >
+
+        <button type="submit">
+            Add Subject
+        </button>
+
+    </form>
+
+    <h3>Subject List</h3>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+        </tr>
+
+        {% for subject in subjects %}
+
+        <tr>
+            <td>{{ subject.id }}</td>
+            <td>{{ subject.code }}</td>
+            <td>{{ subject.name }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+
+</html>
