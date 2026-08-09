@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Attendance Details</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #ddd;
+        }
+
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .absent {
+            color: red;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Attendance Details</h1>
+
+    <table>
+
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Subject Code</th>
+            <th>Subject</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for record in records %}
+
+        <tr>
+
+            <td>{{ record.student_id }}</td>
+
+            <td>{{ record.name }}</td>
+
+            <td>{{ record.code }}</td>
+
+            <td>{{ record.subject_name }}</td>
+
+            <td>{{ record.attendance_date }}</td>
+
+            <td>
+
+                {% if record.status == "Present" %}
+
+                    <span class="present">
+                        Present
+                    </span>
+
+                {% else %}
+
+                    <span class="absent">
+                        Absent
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <a href="/attendance_report">
+        Back to Attendance Report
+    </a>
+
+</body>
+
+</html>

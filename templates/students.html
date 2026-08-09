@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Management</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+            background: #f5f7fa;
+        }
+
+        input, select {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 25px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #2E7D32;
+            color: white;
+        }
+
+        .filter-box {
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Student Management</h1>
+
+<h3>Add New Student</h3>
+
+<form method="POST">
+
+    <input
+        type="text"
+        name="student_id"
+        placeholder="Student ID"
+        required
+    >
+
+    <input
+        type="text"
+        name="name"
+        placeholder="Student Name"
+        required
+    >
+
+    <input
+        type="text"
+        name="department"
+        placeholder="Department"
+        required
+    >
+
+    <select name="semester" required>
+
+        <option value="">Select Semester</option>
+
+        <option value="1st">1st Semester</option>
+        <option value="2nd">2nd Semester</option>
+        <option value="3rd">3rd Semester</option>
+        <option value="4th">4th Semester</option>
+        <option value="5th">5th Semester</option>
+        <option value="6th">6th Semester</option>
+        <option value="7th">7th Semester</option>
+        <option value="8th">8th Semester</option>
+
+    </select>
+
+    <select name="section">
+
+        <option value="">Select Section</option>
+
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+
+    </select>
+
+    <button type="submit">
+        Add Student
+    </button>
+
+</form>
+
+
+<!-- FILTER -->
+
+<div class="filter-box">
+
+    <h3>Filter Students</h3>
+
+    <label>Semester:</label>
+
+    <select id="semesterFilter" onchange="filterStudents()">
+
+        <option value="">All Semester</option>
+
+        <option value="1st">1st Semester</option>
+        <option value="2nd">2nd Semester</option>
+        <option value="3rd">3rd Semester</option>
+        <option value="4th">4th Semester</option>
+        <option value="5th">5th Semester</option>
+        <option value="6th">6th Semester</option>
+        <option value="7th">7th Semester</option>
+        <option value="8th">8th Semester</option>
+
+    </select>
+
+
+    <label>Section:</label>
+
+    <select id="sectionFilter" onchange="filterStudents()">
+
+        <option value="">All Section</option>
+
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+
+    </select>
+
+</div>
+
+
+<h3>Student List</h3>
+
+<table>
+
+    <thead>
+
+        <tr>
+            <th>Serial</th>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Semester</th>
+            <th>Section</th>
+            <th>Action</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for student in students %}
+
+        <tr
+            class="student-row"
+            data-semester="{{ student.semester }}"
+            data-section="{{ student.section }}"
+        >
+
+            <td class="serial"></td>
+
+            <td>
+                {{ student.student_id }}
+            </td>
+
+            <td>
+                {{ student.name }}
+            </td>
+
+            <td>
+                {{ student.department }}
+            </td>
+
+            <td>
+                {{ student.semester }}
+            </td>
+
+            <td>
+                {{ student.section }}
+            </td>
+
+            <td>
+
+                <a href="/students/edit/{{ student.id }}">
+                    Edit
+                </a>
+
+                |
+
+                <a
+                    href="/students/delete/{{ student.id }}"
+                    onclick="return confirm('Are you sure you want to delete this student?')"
+                >
+                    Delete
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+<script>
+
+function filterStudents() {
+
+    let semester =
+        document.getElementById("semesterFilter").value;
+
+    let section =
+        document.getElementById("sectionFilter").value;
+
+    let rows =
+        document.querySelectorAll(".student-row");
+
+    let serial = 1;
+
+    rows.forEach(function(row) {
+
+        let studentSemester =
+            row.dataset.semester;
+
+        let studentSection =
+            row.dataset.section;
+
+        let semesterMatch =
+            semester === "" ||
+            studentSemester === semester;
+
+        let sectionMatch =
+            section === "" ||
+            studentSection === section;
+
+        if (semesterMatch && sectionMatch) {
+
+            row.style.display = "";
+
+            row.querySelector(".serial").innerText =
+                serial;
+
+            serial++;
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+// Page load হলে serial ঠিক থাকবে
+filterStudents();
+
+</script>
+
+</body>
+
+</html>
