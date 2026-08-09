@@ -1825,9 +1825,10 @@ def student_report_pdf(student_id):
 if __name__ == "__main__":
 
     create_tables()
-
     create_default_teacher()
 
     app.run(
+        host="0.0.0.0",
+        port=5000,
         debug=True
     )
